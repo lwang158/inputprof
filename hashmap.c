@@ -19,7 +19,7 @@ void destroyhashmap(hashmap * hmap){
 }
 
 
-int keytoindex(char * key){
+int keytoindex(char * key){  // unfinished
 	unsigned int index;
 	index = hash(key);
 	if index is leagal
@@ -64,12 +64,31 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 }
 
 int hashmapget(hashmap * hmap, char * key, int value) {
-	if (key == NULL)
-		return MAP_MISS;
-	hashmapelem * p = getelem(char * key);
-}
-
-hashmapelem * getelem(char * key){
+	int d;
 	hashmapelem * p;
 	
+	if (key == NULL)
+		return MAP_MISS;
+	
+	d = keytoindex(key);
+	if (d != error){
+		p = hmap->element[d];
+		if (p->key == key) 
+			return p->value;
+		while (p->next!=NULL){
+			if (p->next->key == key)
+				return p->next->value;
+			p = p->next;
+		}
+		return MAP_MISS;
+	} 
+	else {
+		return MAP_MISS;
+	}
+}
+
+int hash(char * key){ // unfinished
+	int index; 
+	/* finish the function content*/
+	return index;
 }

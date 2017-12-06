@@ -21,5 +21,4 @@ void destroyhashmap(hashmap * hmap);
 int keytoindex(char * key);
 int hashmapput(hashmap * hmap, char * key, int value);
 int hashmapget(hashmap * hmap, char * key, int value);
-hashmapelem * getelem(char * key);
-
+int hash(char * key);
