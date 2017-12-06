@@ -4,21 +4,22 @@
 #define MAP_EXCEED -1;
 #define MAP_SUCCESS 0;
 
-typedef struct _hashmap {
+typedef struct _hashmapelem {
 	char * key;
 	int value;
-	hashmap * next;
-}hashmap;
+	hashmapelem * next;
+}hashmapelem;
 
-typedef struct _hashmapelem {
-	hashmap element[MAXNUM];
-	unsigned int n; // current size of hashmap
-} hashmapelem;
+typedef struct _hashmap {
+	hashmapelem * element[MAXNUM];
+	unsigned int m; // size of ELEMENT_LENGTH
+} hashmap;
 
-extern hashmap * newhashmap();
 
 hashmap * createhashmap();
 void destroyhashmap(hashmap * hmap);
+int keytoindex(char * key);
 int hashmapput(hashmap * hmap, char * key, int value);
 int hashmapget(hashmap * hmap, char * key, int value);
+hashmapelem * getelem(char * key);
 
