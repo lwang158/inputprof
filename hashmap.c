@@ -90,5 +90,6 @@ int hashmapget(hashmap * hmap, char * key, int value) {
 int hash(char * key){ // unfinished
 	int index; 
 	/* finish the function content*/
+	
 	return index;
 }

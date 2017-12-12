@@ -1,4 +1,4 @@
-#define MAXNUM 268435456; //max number of hashmap elements
+#define MAXNUM 134217728; //max number of hashmap elements 128M
 #define MAP_MISS -3;
 #define MAP_FULL -2;
 #define MAP_EXCEED -1;
