@@ -15,9 +15,9 @@ typedef struct _hashmapelem {
 } hashmapelem;
 
 typedef struct _hashmap {
-	struct _hashmapelem * elements[SLOTLENGTH]; // a large prime as the length of the element slots
-	unsigned int slotsize; // size of the taken slots
-	unsigned long int totalelem;
+	struct _hashmapelem ** elements; // a large prime as the length of the element slots
+	unsigned long slotsize; // size of the taken slots
+	unsigned long totalelem;
 } hashmap;
 
 

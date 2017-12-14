@@ -13,36 +13,37 @@ typedef struct datastruct{
 }
  
 int main () {
-	int index,i,length;
+	int i,length;
 	int error;
 	hashmap * hmap;
 	char key_string[256];
 	datas * value;
 	
-	unsigned long size = 1024*1024;
+	unsigned long index, size = 1024*1024;
 	//size = size * 1024*2*64;
 	hmap = createhashmap();
 	if (hmap == NULL) {
 		printf("create hashmap error\n");
 		return -1;
 	}
-        printf("after createhashmap()\n");
-	for (index=1;index<size;size--){
+        //printf("after createhashmap()\n");
+	for (index=0;index<size;index++){
 		value = (datas *)malloc(sizeof(struct datastruct));
-		sprintf(value->keystring,"%lx",size);
-                printf("outter for, current size = %lu, value->string is %s. \n",size, value->keystring);
+		sprintf(value->keystring,"%lx",index);
+                //printf("entering outter for, current size = %lu, value->string is %s. \n",size, value->keystring);
 		length = strlen(value->keystring);
-                printf("keystring+/0's  length is %d. \n", length+1);
+                //printf("keystring+/0's  length is %d. \n", length+1);
 		for (i=length+2;i>=2;i--){ // add ox prefix to keystring
                         value->keystring[i] = value->keystring[i-2];// move a[i-2] to a[i]
 		}
 		value->keystring[0]='0';
 		value->keystring[1]='x';
-                printf("after inner for, the value->keystring is %s\n",value->keystring);
-		value->number = size;
+                //printf("after inner for, the value->keystring is %s\n",value->keystring);
+		value->number = index;
 		error = hashmapput(hmap, value->keystring, value->number);
-		if (error != -1) printf("there is no error in %dth round\n", index);
+		if (error == -1) printf("there is an error in %luth round\n", index);
 	}
+        printf("after test, hmap->slotsize=%lu, hmap->totalelem=%lu. \n",hmap->slotsize, hmap->totalelem);
 	
 	return 1;
 }
