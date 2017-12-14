@@ -6,7 +6,15 @@
 
 hashmap * createhashmap(){
 	hashmap * phashmap = (hashmap*)malloc(sizeof(hashmap));
-	phashmap->elements = (hashmapelem *)calloc(SLOTLENGTH, sizeof(hashmapelem))
+        int i;
+        printf("entering createhashmap\n");
+        for (i=0;i<SLOTLENGTH;i++){
+                (phashmap->elements)[i]=(struct _hashmapelem *)malloc(sizeof(struct _hashmapelem ));// ****errorhere
+                if (!(phashmap->elements[i])) printf("malloc() hashmapelem problem\n");
+                printf("print hashmap->elements[%d]: %d\n",i,phashmap->elements[i]);
+        }
+        printf("after initialization\n");
+	//phashmap->elements = (struct _hashmapelem *)calloc(SLOTLENGTH, sizeof(struct _hashmapelem));
 	if (!phashmap || !phashmap->elements) {
 		printf("Error in createhashmap(), momory allocation not success\n");
 		return NULL;
@@ -16,11 +24,12 @@ hashmap * createhashmap(){
 		phashmap->totalelem = 0;
 		return phashmap;
 	}
+        printf("exit createhashmap\n");
 }
 
 void destroyhashmap(hashmap * hmap){
 	hashmap* hm = (hashmap*) hmap;
-	free(hm->elements)
+	free(hm->elements);
 	free(hm);
 }
 
@@ -41,7 +50,7 @@ unsigned int keytoindex(char * key){  // return -1 means error
 }
 
 int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of elem <key,value>
-	hashmapelem * p, * q;
+	struct _hashmapelem * p, * q;
 	char * startaddr = key;
 	int oldvalue;
 	unsigned int index;
@@ -55,13 +64,16 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 		printf("Error in hashmapput(), empty key.\n"); 
 		return -1;
 	}
+        printf("entering hashmapput(), key is %s, value is %d,\n", key, value);
 	index = keytoindex(startaddr);
+        printf("after keytoindex(), index is %d\n", index);
 	if (index == -1 ){
 		printf("Error in hashmapput(), keytoindex error.\n");
 		return -1;
 	}
-	if (hmap->element[index] == NULL){ // the index slot is empty, put the first element
-		p = (hashmapelem *)malloc(sizeof(struct hashmapelem));
+	if (hmap->elements[index] == NULL){ // the index slot is empty, put the first element
+                printf("the current elements[%d] position is NULL. \n",index);
+		p = (struct _hashmapelem *)malloc(sizeof(struct _hashmapelem));
 		if (p==NULL){
 			printf("Error in hashmapput() 1, hashmapelem allocation error.\n"); 
 			return -1;
@@ -69,14 +81,14 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 		p->key = key;
 		p->next = NULL;
 		p->value = value;
-		hmap->element[index] = p;
-		
+		hmap->elements[index] = p;
+		printf("successfully added one element to elements[%d].\n", index);
 		hmap->slotsize++;
 		hmap->totalelem++;
 		
 		return MAP_SUCCESS;
 	}
-	q = hmap->element[index];  // the index slot is not empty
+	q = hmap->elements[index];  // the index slot is not empty
 	if (!strcmp(q->key, key)) { // the put element is the first elem
 		oldvalue = q->value;
 		q->value = value;
@@ -84,28 +96,27 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 	}
 	while(q->next != NULL){ // the put element is in the list
 		if (!strcmp(q->next->key, key)) {
-			oldvalue = q->next->value;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-			q->next->value = value;
+			oldvalue = q->next->value;                                                                                                                    q->next->value = value;
 			return oldvalue;
 		}
 		q=q->next;
 	}
-	p = (hashmapelem *)malloc(sizeof(struct hashmapelem)); //the put element is not in the list. put the new element at the first position
+	p = (struct _hashmapelem *)malloc(sizeof(struct _hashmapelem)); //the put element is not in the list. put the new element at the first position
 	if (p==NULL){
 		printf("Error in hashmapput() 2, hashmapelem allocation error.\n"); 
 		return -1;
 	}
 	p->key = key;
 	p->value = value;
-	p->next = hmap->element[index]->next; // ***here needs to be very careful. insert the put node as the first node
-	hmap->element[index] = p;
+	p->next = hmap->elements[index]->next; // ***here needs to be very careful. insert the put node as the first node
+	hmap->elements[index] = p;
 	hmap->totalelem++;
 	return MAP_SUCCESS;
 }
 
 int hashmapget(hashmap * hmap, char * key, int value) {
 	unsigned int index;
-	hashmapelem * p;
+	struct _hashmapelem * p;
 	
 	if (hmap == NULL) {
 		printf("Error in hashmapget(), empty hmap.\n"); 
@@ -120,7 +131,7 @@ int hashmapget(hashmap * hmap, char * key, int value) {
 	index = keytoindex(key);
 	
 	if (index != -1){
-		p = hmap->element[index];
+		p = hmap->elements[index];
 		if (!strcmp(p->key, key)) 
 			return p->value;
 		while (p->next!=NULL){

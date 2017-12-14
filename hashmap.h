@@ -1,5 +1,6 @@
 //#define MAXNUM 33554432; //max number of hashmap elements 32M
-#define SLOTLENGTH 54018521  // a large prime use
+//#define SLOTLENGTH 54018521  // a large prime use
+#define SLOTLENGTH 8521  // a large prime use
 // #define MAXNUM 39916801
 #define MAP_MISS -3;
 #define MAP_FULL -2;
@@ -9,12 +10,12 @@
 typedef struct _hashmapelem {
 	char * key;  // indicate the address of the memory cell
 	int value;   // indicate the latest access of the memory cell
-	hashmapelem * next; // linked to the next element
+	struct _hashmapelem * next; // linked to the next element
 	int hash;
-}hashmapelem;
+} hashmapelem;
 
 typedef struct _hashmap {
-	hashmapelem * elements[SLOTLENGTH]; // a large prime as the length of the element slots
+	struct _hashmapelem * elements[SLOTLENGTH]; // a large prime as the length of the element slots
 	unsigned int slotsize; // size of the taken slots
 	unsigned long int totalelem;
 } hashmap;
