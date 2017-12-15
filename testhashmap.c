@@ -56,11 +56,22 @@ int main () {
 		value->number = index;
 		//printf("start hashmapget(), keystring: %s, keyvalue: %d \n",value->keystring, value->number);
 		error = hashmapget(hmap, value->keystring, value->number);
-		if (error <0) printf("hashmapget(): there is an error in %luth round\n\n", index);
+		if (error < 0) printf("hashmapget(): there is an error in %luth round\n\n", index);
 	}
 	printf("after hashmapget() test\n")
 	for (index=0;index<size;index++) {
-		;
+		value = (datas *)malloc(sizeof(struct datastruct));
+		sprintf(value->keystring,"%lx",index);
+		length = strlen(value->keystring);
+		for (i=length+2;i>=2;i--){ // add ox prefix to keystring
+			value->keystring[i] = value->keystring[i-2];// move a[i-2] to a[i]
+		}
+		value->keystring[0]='0';
+		value->keystring[1]='x';
+		value->number = index;
+		
+		error = hashmapremove(hmap, key);
+		if (error < 0) printf("hashmapremove(): there is an error in %luth round\n\n", index);
 	}
 	return 1;
 }
