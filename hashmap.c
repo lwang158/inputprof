@@ -50,8 +50,10 @@ unsigned int keytoindex(char * key){  // return -1 means error
 }
 
 int hashmapremove(hashmap * hmap, char * key){
-	struct _hashmapelem *p *q,
-	char * stringaddr = key;
+	struct _hashmapelem *p, *q;
+	unsigned int index;
+	char * stringaddr;
+	stringaddr = key;
 	
 	if (hmap == NULL) {
 		printf("Error in hashmapremove(), empty hmap.\n"); 
@@ -62,29 +64,36 @@ int hashmapremove(hashmap * hmap, char * key){
 		printf("Error in hashmapremove(), empty key.\n"); 
 		return -1;
 	}
-	index = keytoindex(startaddr);
+	index = keytoindex(stringaddr);
         //printf("-----------------entering hashmapremove(), key is %s, value is %d, index is %u.\n", key, value, index);
 	if (index == -1 ){
 		printf("Error in hashmapremove(), keytoindex error.\n");
 		return -1;
 	}
 	
-	if (hmap->elements[index] != NULL){
+	if ((hmap->elements[index]) != NULL){
 		p = hmap->elements[index];
 		if (!strcmp(p->key, key)){ // slot element is the to be removed one.
 			hmap->elements[index] = p->next;
+			//printf("slot element remove with key:%s\n",p->key);
 			free(p->key);
 			free(p);
-			printf("successfully remove element with key:%s\n",p->key);
+			if (hmap->elements[index] == NULL){
+				hmap->slotsize--;// if hmap->elements[index] is empty, slotsize--
+			}
+			hmap->totalelem--;
+			//printf("---------successfully remove the element.\n ");
 			return 0;
 		}
 		while(p->next != NULL){
 			if(!strcmp(p->next->key,key)){ // list element is the to be removed one. 
 				q = p->next; // q needs to be removed
+				//printf("list element remove with key:%s\n",q->key);
 				p->next = q->next; // ******needs to be very careful
 				free(q->key);
 				free(q);
-				printf("successfully remove element with key:%s\n",p->key);
+				hmap->totalelem--;
+				//printf("---------successfully remove the element.\n");
 				return 0;
 			}
 			p = p->next;
@@ -138,33 +147,33 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 			if (!strcmp(q->key, key)) { // the put element is the first elem
 				//printf("the put element is the first element of elements[%u]\n",index);
 				oldvalue = q->value;
-			q->value = value;
-			return oldvalue;
-		} else {
-			while(q->next != NULL){ // the put element is in the list
-				if (!strcmp(q->next->key, key)) {
+				q->value = value;
+				return oldvalue;
+			} else {
+				while(q->next != NULL){ // search in the list of elements[index] 
+					if (!strcmp(q->next->key, key)) {
                         
                         		//printf("the put element is in the list of elements[%u]\n",index);
 					oldvalue = q->next->value;
 					q->next->value = value;
 					return oldvalue;
+					}
+					q=q->next;
 				}
-				q=q->next;
-			}
         		//printf("the put element is not in the list of elements[%u]\n",index);
-			p = (struct _hashmapelem *)malloc(sizeof(struct _hashmapelem)); //the put element is not in the list. put the new element at the first position
-        		if (p==NULL){
+				p = (struct _hashmapelem *)malloc(sizeof(struct _hashmapelem)); //the put element is not in the list. put the new element at the first position
+	        		if (p==NULL){
 				printf("Error in hashmapput() 2, hashmapelem allocation error.\n"); 
 				return -1;
-			}
-			p->key = key;
-			p->value = value;
-			p->next = NULL;
-			p->next = hmap->elements[index]; // ***here needs to be very careful. insert the put node as the first node
-			hmap->elements[index] = p;
-			hmap->totalelem++;
+				}
+				p->key = key;
+				p->value = value;
+				p->next = NULL;
+				p->next = hmap->elements[index]; // ***here needs to be very careful. insert the put node as the first node
+				hmap->elements[index] = p;
+				hmap->totalelem++;
 			//printf("successfully added one element to the list of elements[%d], key is %s, value is %d.\n", index, hmap->elements[index]->key,hmap->elements[index]->value);
-			return MAP_SUCCESS;
+				return MAP_SUCCESS;
 			}
 		}
 }
