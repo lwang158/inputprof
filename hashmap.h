@@ -2,10 +2,10 @@
 //#define SLOTLENGTH 54018521  // a large prime use
 #define SLOTLENGTH 8521  // a large prime use
 // #define MAXNUM 39916801
-#define MAP_MISS -3;
-#define MAP_FULL -2;
-#define MAP_EXCEED -1;
-#define MAP_SUCCESS 0;
+#define MAP_MISS -3
+#define MAP_FULL -2
+#define MAP_EXCEED -1
+#define MAP_SUCCESS 0
 
 typedef struct _hashmapelem {
 	char * key;  // indicate the address of the memory cell
@@ -23,6 +23,7 @@ typedef struct _hashmap {
 
 hashmap * createhashmap();
 void destroyhashmap(hashmap * hmap);
+int hashmapremove(hashmap * hmap, char * key);
 unsigned int keytoindex(char * key);
 int hashmapput(hashmap * hmap, char * key, int value);
 int hashmapget(hashmap * hmap, char * key, int value);
