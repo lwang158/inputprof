@@ -49,6 +49,53 @@ unsigned int keytoindex(char * key){  // return -1 means error
 		return -1;
 }
 
+int hashmapremove(hashmap * hmap, char * key){
+	struct _hashmapelem *p *q,
+	char * stringaddr = key;
+	
+	if (hmap == NULL) {
+		printf("Error in hashmapremove(), empty hmap.\n"); 
+		return -1;
+	}
+	
+	if (key == NULL) {
+		printf("Error in hashmapremove(), empty key.\n"); 
+		return -1;
+	}
+	index = keytoindex(startaddr);
+        //printf("-----------------entering hashmapremove(), key is %s, value is %d, index is %u.\n", key, value, index);
+	if (index == -1 ){
+		printf("Error in hashmapremove(), keytoindex error.\n");
+		return -1;
+	}
+	
+	if (hmap->elements[index] != NULL){
+		p = hmap->elements[index];
+		if (!strcmp(p->key, key)){ // slot element is the to be removed one.
+			hmap->elements[index] = p->next;
+			free(p->key);
+			free(p);
+			printf("successfully remove element with key:%s\n",p->key);
+			return 0;
+		}
+		while(p->next != NULL){
+			if(!strcmp(p->next->key,key)){ // list element is the to be removed one. 
+				q = p->next; // q needs to be removed
+				p->next = q->next; // ******needs to be very careful
+				free(q->key);
+				free(q);
+				printf("successfully remove element with key:%s\n",p->key);
+				return 0;
+			}
+			p = p->next;
+		}
+		printf("element with key does not in the list\n");
+		return -1;
+	} else {
+		printf("element does not exist, slot empty\n");
+		return -1;
+	}
+}
 int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of elem <key,value>
 	struct _hashmapelem * p, * q;
 	char * startaddr = key;
@@ -124,7 +171,6 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 
 int hashmapget(hashmap * hmap, char * key, int value) {
 	unsigned int index;
-	int i;
 	struct _hashmapelem * p, * q;
 	//printf("---------entering hashmapget().\n");
 	if (hmap == NULL) {
