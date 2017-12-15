@@ -122,7 +122,7 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 int hashmapget(hashmap * hmap, char * key, int value) {
 	unsigned int index;
 	struct _hashmapelem * p;
-	
+	printf("---------entering hashmapget().\n");
 	if (hmap == NULL) {
 		printf("Error in hashmapget(), empty hmap.\n"); 
 		return -1;
@@ -137,11 +137,16 @@ int hashmapget(hashmap * hmap, char * key, int value) {
 	
 	if (index != -1){
 		p = hmap->elements[index];
-		if (!strcmp(p->key, key)) 
+		printf("find index:%u, hmap->elements[%u] has key:%s\n", index, index, key);
+		if (!strcmp(p->key, key)) {// the first element's key matches. 
+			printf(" slot element match.\n");
 			return p->value;
+		}
 		while (p->next!=NULL){
-			if (!strcmp(p->next->key, key))
+			if (!strcmp(p->next->key, key)) {} // the key is in the list of hmap->elements[index]
+				printf("list element matches.\n");
 				return p->next->value;
+		}
 			p = p->next;
 		}
 		return MAP_MISS;

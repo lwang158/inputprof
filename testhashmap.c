@@ -19,7 +19,7 @@ int main () {
 	char key_string[256];
 	datas * value;
 	
-	unsigned long index, size = 1024*1024;
+	unsigned long index, size = 5;//1024*1024;
 	//size = size * 1024*2*64;
 	hmap = createhashmap();
 	if (hmap == NULL) {
@@ -41,9 +41,21 @@ int main () {
                 //printf("after inner for, the value->keystring is %s\n",value->keystring);
 		value->number = index;
 		error = hashmapput(hmap, value->keystring, value->number);
-		if (error == -1) printf("there is an error in %luth round\n", index);
+		if (error == -1) printf("hashmapput(): there is an error in %luth round\n", index);
 	}
-        printf("after test, hmap->slotsize=%lu, hmap->totalelem=%lu. \n",hmap->slotsize, hmap->totalelem);
-	
+    printf("after test, hmap->slotsize=%lu, hmap->totalelem=%lu. \n",hmap->slotsize, hmap->totalelem);
+	for (index=0; index<size; index++){
+		value = (datas *)malloc(sizeof(struct datastruct));
+		sprintf(value->keystring,"%lx",index);
+		length = strlen(value->keystring);
+		for (i=length+2;i>=2;i--){ // add ox prefix to keystring
+			value->keystring[i] = value->keystring[i-2];// move a[i-2] to a[i]
+		}
+		value->keystring[0]='0';
+		value->keystring[1]='x';
+		value->number = index;
+		error = hashmapget(hmap, value->keystring, value->number);
+		if (error <0) printf("hashmapget(): there is an error in %luth round\n", index);
+	}
 	return 1;
 }
