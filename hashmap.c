@@ -29,6 +29,10 @@ hashmap * createhashmap(){
 
 void destroyhashmap(hashmap * hmap){
 	hashmap* hm = (hashmap*) hmap;
+	if (hm == NULL){
+		printf("destroyhashmap(): cannot destroy hmap, it is NULL.\n");
+		
+	}
 	free(hm->elements);
 	free(hm);
 }

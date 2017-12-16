@@ -1,6 +1,6 @@
 #include "inputpro.h"
 
-int expandstack(shadowstack * psstack){
+int expandstack(shadowstack * psstack){ // each expand we increase psstack->exposize elements
 	
 }
 
@@ -31,12 +31,11 @@ shadowstack * createshadowstack(){
 	if (!psstack || !psstack->stackelements) {
 		printf("Error in createshadowstack(), momory allocation not success\n");
 		return NULL;
-	}
-	else {
-		psstack -> stacksize= 0;
+	} else {
 		psstack -> top = 0;
-		psstack -> exposize = INIEXPOSIZE;
-		return phashmap;
+		psstack -> exposize = INIEXPOSIZE; // exposize is the size for next expand.
+		psstack -> stacksize= INIEXPOSIZE; // initial size of stack is INIEXPOSIZE.
+		return psstack;
 	}
 }
 

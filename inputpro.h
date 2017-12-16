@@ -13,8 +13,8 @@ typedef struct _shadowstackelem {
 typedef struct _shadowstack {
 	struct _shadowstackelem * stackelemets;
 	unsigned long top;
-	unsigned long stacksize;
-	unsigned long exposize;
+	unsigned long stacksize; // current size of the stack
+	unsigned long exposize; // the size for the next expand
 } shadowstack;
 
 shadowstackelem * createstackelem(shadowstack * psstack);
