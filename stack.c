@@ -1,8 +1,30 @@
 #include "inputpro.h"
 
+shadowstackelem * createstacknode(shadowstack * psstack){
+	shadowstackelem * ssnode;
+	if (psstack == NULL){
+		printf("createstacknode(): psstack is NULL. \n");
+		return NULL;
+	}
+	ssnode = (struct _shadowstackelem *)malloc(sizeof(struct _shadowstackelem));
+	if (ssnode == NULL){
+		printf("fail to create a new shadownode.\n");
+		return NULL;
+	} else {
+		if (psstack->stacksize+1 >= exposize)
+	}
+}
+
+shadowstack * createshadowstack(){
+	shadowstack * psstack;
+	
+}
+
 void call(char * funcname) {
 	count++;
 	top++;
+	shadowstackelem * ssnode;
+	ssnode = (struct _shadowstackelem *)malloc(sizeof(struct _shadowstackelem));
 	s[top].funcname = funcname;
 	s[top].ts = count;
 	s[top].rms = 0;
@@ -12,7 +34,7 @@ void call(char * funcname) {
 int callexit() {
 	if (top == 0) 
 		return 1;//error, return 1;
-	else {
+	else { 
 		s[top-1].rms += s[top].rms;
 		top--;
 		return 0;

@@ -6,15 +6,15 @@
 
 hashmap * createhashmap(){
 	hashmap * phashmap = (hashmap*)malloc(sizeof(hashmap));
-        int i;
+        //int i;
         //printf("entering createhashmap\n");
-        for (i=0;i<SLOTLENGTH;i++){
-                phashmap->elements=(struct _hashmapelem **)calloc(SLOTLENGTH,sizeof(struct _hashmapelem *));// ****errorhere, corrected
-                if ((phashmap->elements[i])) printf("calloc() hashmapelem problem, elements[%d] not NULL. \n",i);
+        //for (i=0;i<1;i++){
+        //        phashmap->elements=(struct _hashmapelem **)calloc(SLOTLENGTH,sizeof(struct _hashmapelem *));// ****errorhere, corrected
+        //        if ((phashmap->elements[i])) printf("calloc() hashmapelem problem, elements[%d] not NULL. \n",i);
                 //printf("print hashmap->elements[%d]: %p\n",i,phashmap->elements[i]);
-        }
+        //}
         //printf("hashmap and hashmap->elements create finished\n");
-	//phashmap->elements = (struct _hashmapelem *)calloc(SLOTLENGTH, sizeof(struct _hashmapelem));
+	phashmap->elements=(struct _hashmapelem **)calloc(SLOTLENGTH,sizeof(struct _hashmapelem *));
 	if (!phashmap || !phashmap->elements) {
 		printf("Error in createhashmap(), momory allocation not success\n");
 		return NULL;
