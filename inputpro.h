@@ -1,6 +1,6 @@
 #define INIEXPOSIZE 1024
 int count = 0; //global variable 
-int top = 0; // index of stack
+
 
 
 typedef struct _shadowstackelem {
@@ -11,13 +11,15 @@ typedef struct _shadowstackelem {
 } shadowstackelem;
 
 typedef struct _shadowstack {
-	struct _shadowstackelem * sdstack;
+	struct _shadowstackelem * stackelemets;
+	unsigned long top;
 	unsigned long stacksize;
 	unsigned long exposize;
 } shadowstack;
 
-shadowstackelem * createstacknode(shadowstack * psstack);
+shadowstackelem * createstackelem(shadowstack * psstack);
 shadowstack * createshadowstack();
+int expandstack(shadowstack * psstack);
 void call(char * funcname);
 int callexit();
 void read(unsigned long int startaddr, unsigned int length);

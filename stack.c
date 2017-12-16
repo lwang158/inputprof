@@ -1,7 +1,12 @@
 #include "inputpro.h"
 
-shadowstackelem * createstacknode(shadowstack * psstack){
+int expandstack(shadowstack * psstack){
+	
+}
+
+shadowstackelem * createstackelem(shadowstack * psstack){
 	shadowstackelem * ssnode;
+	int expand;
 	if (psstack == NULL){
 		printf("createstacknode(): psstack is NULL. \n");
 		return NULL;
@@ -10,21 +15,35 @@ shadowstackelem * createstacknode(shadowstack * psstack){
 	if (ssnode == NULL){
 		printf("fail to create a new shadownode.\n");
 		return NULL;
-	} else {
-		if (psstack->stacksize+1 >= exposize)
+	} else { // successfully create a stack element
+		if (psstack->top + 1 >= psstack->stacksize){ // need to expand stack length;
+			expand=expandstack(psstack);
+			if ()
+		} 
 	}
 }
 
 shadowstack * createshadowstack(){
 	shadowstack * psstack;
+	psstack = (shadowstack *) malloc (sizeof(shadowstack));
+	psstack->stackelements = (struct shadowstackelem *)calloc(INIEXPOSIZE,sizeof(struct _shadowstackelem));
 	
+	if (!psstack || !psstack->stackelements) {
+		printf("Error in createshadowstack(), momory allocation not success\n");
+		return NULL;
+	}
+	else {
+		psstack -> stacksize= 0;
+		psstack -> top = 0;
+		psstack -> exposize = INIEXPOSIZE;
+		return phashmap;
+	}
 }
 
 void call(char * funcname) {
 	count++;
 	top++;
-	shadowstackelem * ssnode;
-	ssnode = (struct _shadowstackelem *)malloc(sizeof(struct _shadowstackelem));
+
 	s[top].funcname = funcname;
 	s[top].ts = count;
 	s[top].rms = 0;
