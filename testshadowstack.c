@@ -19,16 +19,19 @@ int main () {
 	hashmap * hmap;
 	char key_string[256];
 	datas * value;
+	
 	shadowstack * psstack;
-	psstack = cr
-	unsigned long index, size = 1024*1024;
-	//size = size * 1024*2*64;
-	hmap = createhashmap();
-	if (hmap == NULL) {
-		printf("create hashmap error\n");
+	psstack = createshadowstack();
+	if (psstack == NULL) {
+		printf("cannot create shadowstack\n");
 		return -1;
 	}
-        //printf("after createhashmap()\n");
+	unsigned long index, size = 1024;
+	//size = size * 1024*2*64;
+    printf("after createshadowstack()\n");
+	
+	if(emptystack(psstack)==0)printf("the psstack is empty\n");
+	
 	for (index=0;index<size;index++){
 		value = (datas *)malloc(sizeof(struct datastruct));
 		sprintf(value->keystring,"%lx",index);
@@ -39,14 +42,15 @@ int main () {
                         value->keystring[i] = value->keystring[i-2];// move a[i-2] to a[i]
 		}
 		value->keystring[0]='0';
-		value->keystring[1]='x';
-                //printf("after inner for, the value->keystring is %s\n",value->keystring);
+		value->keystring[1]='x';            
+		//printf("after inner for, the value->keystring is %s\n",value->keystring);
 		value->number = index;
-		error = hashmapput(hmap, value->keystring, value->number);
-		if (error == -1) printf("hashmapput(): there is an error in %luth round\n", index);
+		error = pushstackelem(psstack, value->keystring);
+		if (error == -1) printf("pushstackelem(): there is an error in %luth round\n", index);
 	}
-	printf("after hashmapput() test, hmap->slotsize=%lu, hmap->totalelem=%lu. \n\n",hmap->slotsize, hmap->totalelem);
-	for (index=0; index<size; index++){
+	printf("after pushstackelem() test, psstack->stacksize=%lu, psstack->elementsnum=%lu. \n\n",psstack->stacksize, psstack->elementsnum);
+	
+/*	for (index=0; index<size; index++){
 		value = (datas *)malloc(sizeof(struct datastruct));
 		sprintf(value->keystring,"%lx",index);
 		length = strlen(value->keystring);
@@ -94,5 +98,5 @@ int main () {
 		if (error == -1) printf("2nd hashmapput(): there is an error in %luth round\n", index);
 	}
 	printf("add elements again, hmap->slotsize=%lu, hmap->totalelem=%lu. \n\n",hmap->slotsize, hmap->totalelem);
-	return 1;
+*/	return 1;
 }
