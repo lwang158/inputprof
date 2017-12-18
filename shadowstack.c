@@ -1,9 +1,9 @@
 #include "inputpro.h"
+#include "shadowstack.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int count = 0;
-int conscost = 1;
+//unsigned int count = 0; // should be given in the testing code
 
 int expandstack(shadowstack * psstack){ // each expand we increase psstack->exposize elements
 	shadowstackelem * newstackelements;
@@ -55,7 +55,7 @@ int emptystack(shadowstack * psstack){
 	else return -2;
 }
 
-int pushstackelem(shadowstack * psstack, char * funcname){
+int pushstackelem(shadowstack * psstack, char * funcname, unsigned int count){
 	int expand;
 	if (psstack == NULL || funcname == NULL){
 		printf("createstacknode(): stack pointer or function name is NULL. \n");
@@ -69,13 +69,15 @@ int pushstackelem(shadowstack * psstack, char * funcname){
 		}
 	} 
 	(psstack->stackelements[psstack->top]).funcname = funcname;
-	(psstack->stackelements[psstack->top]).ts = 0;//count;
+	(psstack->stackelements[psstack->top]).ts = count;//count;
 	(psstack->stackelements[psstack->top]).rms = 0;
-	(psstack->stackelements[psstack->top]).cost = 0;
+	(psstack->stackelements[psstack->top]).cost = 0; // getcost() function;
 	psstack->elementsnum++;
 	psstack->top++;
 	return 0;
 }
+
+
 
 int popstackelem(shadowstack * psstack){
 	if (psstack == NULL){
@@ -83,7 +85,7 @@ int popstackelem(shadowstack * psstack){
 		return -1;
 	}
 	if (psstack->top==0){
-		printf("stack is empty\n");
+		printf("popstackelem(): stack is empty\n");
 		return -1;
 	} else {
 		psstack->top--;
@@ -109,52 +111,3 @@ shadowstack * createshadowstack(){
 	}
 }
 
-/*void call(shadowstack * psstack,char * funcname) {
-	count++;
-//	top++;
-
-	s[top].funcname = funcname;
-	s[top].ts = count;
-	s[top].rms = 0;
-	s[top].cost = 0;	
-}
-
-int callexit() {
-	if (top == 0) 
-		return 1;//error, return 1;
-	else { 
-		s[top-1].rms += s[top].rms;
-		top--;
-		return 0;
-	}
-	 
-}
-
-void read(unsigned long int startaddr, unsigned int length) {
-	unsigned long int i;
-	unsigned int j,l;
-	j = length; // j records byte length
-	for (i=startaddr; j > 0; j--){ // i is the current byte address
-		if (ts[i] < s[top].ts){//first access byte cell
-			s[top].rms++;
-		} 
-		if (ts[i] != 0) {
-			for (l=top;s[l].ts <= ts[i];l--)//find max index in s, that s[l].ts <= ts[i]
-				break;
-			s[l].rms--;
-		}
-		ts[i] = count;
-		i += 8;// continue on next byte
-	}
-		
-}
-
-void write(unsigned long int  startaddr, unsigned int length) {
-	unsigned long int i;
-	unsigned int j = length;
-	for (i = startaddr; j > 0; j--){
-		ts[i] = count;
-		i += 8;
-	}
-}
-*/
