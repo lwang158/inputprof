@@ -34,7 +34,7 @@ int main () {
 	
 	if(emptystack(psstack)==0)printf("the psstack is empty\n");
 	
-	for (index=0;index<size;index++){
+	for (index=0;index<size*2;index++){
 		value = (datas *)malloc(sizeof(struct datastruct));
 		sprintf(value->keystring,"%lx",index);
                 //printf("entering outter for, current size = %lu, value->string is %s. \n",size, value->keystring);
@@ -60,9 +60,9 @@ int main () {
 		if (ssnode != NULL){
 			printf("current top node, ssnode->funcname is %s\n",ssnode->funcname);
 		} else {
-			printf("popstackelem() fail, empty stack\n");
+			printf("topstackelem() fail, empty stack\n");
 		}
-		printf("start popstackelem()");
+		printf("start popstackelem()\n");
 		popresult = popstackelem(psstack);
 		if (popresult == 0){
 			printf("pop stack success, psstack->elementsnum=%lu\n",psstack->elementsnum);
