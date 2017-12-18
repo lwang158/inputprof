@@ -1,6 +1,4 @@
 #define INIEXPOSIZE 1024
-int count = 0; //global variable 
-int conscost = 1;
 
 
 
@@ -12,7 +10,7 @@ typedef struct _shadowstackelem {
 } shadowstackelem;
 
 typedef struct _shadowstack {
-	struct _shadowstackelem * stackelemets;
+	struct _shadowstackelem * stackelements;
 	unsigned long top; // ****extra attention, stackelemets[top-1] is the top elements. 
 	unsigned long stacksize; // current size of the stack
 	unsigned long elementsnum; // the size for the next expand

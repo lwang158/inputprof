@@ -2,7 +2,7 @@
 # include<stdio.h>
 # include<string.h>
 # include "hashmap.h"
-# include "inputprof.h"
+# include "inputpro.h"
 
 typedef struct datastruct{
 	char keystring[30];
@@ -21,6 +21,8 @@ int main () {
 	datas * value;
 	
 	shadowstack * psstack;
+	struct _shadowstackelem * ssnode;
+	int popresult;
 	psstack = createshadowstack();
 	if (psstack == NULL) {
 		printf("cannot create shadowstack\n");
@@ -28,7 +30,7 @@ int main () {
 	}
 	unsigned long index, size = 1024;
 	//size = size * 1024*2*64;
-    printf("after createshadowstack()\n");
+    	printf("after createshadowstack()\n");
 	
 	if(emptystack(psstack)==0)printf("the psstack is empty\n");
 	
@@ -49,23 +51,27 @@ int main () {
 		if (error == -1) printf("pushstackelem(): there is an error in %luth round\n", index);
 	}
 	printf("after pushstackelem() test, psstack->stacksize=%lu, psstack->elementsnum=%lu. \n\n",psstack->stacksize, psstack->elementsnum);
+	if(emptystack(psstack)==0)printf("the psstack is empty\n");
+	else printf("now the psstack is not empty\n");
 	
-/*	for (index=0; index<size; index++){
-		value = (datas *)malloc(sizeof(struct datastruct));
-		sprintf(value->keystring,"%lx",index);
-		length = strlen(value->keystring);
-		for (i=length+2;i>=2;i--){ // add ox prefix to keystring
-			value->keystring[i] = value->keystring[i-2];// move a[i-2] to a[i]
+	for (index=0; index<size; index++){
+		printf("------start topstackelem() & popstackelem() test:\n" );
+		ssnode = topstackelem(psstack);
+		if (ssnode != NULL){
+			printf("current top node, ssnode->funcname is %s\n",ssnode->funcname);
+		} else {
+			printf("popstackelem() fail, empty stack\n");
 		}
-		value->keystring[0]='0';
-		value->keystring[1]='x';
-		value->number = index;
-		//printf("start hashmapget(), keystring: %s, keyvalue: %d \n",value->keystring, value->number);
-		error = hashmapget(hmap, value->keystring, value->number);
-		if (error < 0) printf("hashmapget(): there is an error in %luth round\n\n", index);
+		printf("start popstackelem()");
+		popresult = popstackelem(psstack);
+		if (popresult == 0){
+			printf("pop stack success, psstack->elementsnum=%lu\n",psstack->elementsnum);
+		} else {
+			printf("pos stack failure: there is an error in %luth round\n\n", index);
+		}
 	}
-	printf("after hashmapget() test\n");
-	for (index=5;index<1000;index++) {
+	printf("after topstackelem() & popstackelem() test\n");
+/*	for (index=5;index<1000;index++) {
 		value = (datas *)malloc(sizeof(struct datastruct));
 		sprintf(value->keystring,"%lx",index);
 		length = strlen(value->keystring);

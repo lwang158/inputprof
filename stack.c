@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+int count = 0;
+int conscost = 1;
 
 int expandstack(shadowstack * psstack){ // each expand we increase psstack->exposize elements
 	shadowstackelem * newstackelements;
@@ -14,7 +16,7 @@ int expandstack(shadowstack * psstack){ // each expand we increase psstack->expo
 	}
 	currentstactsize = psstack->stacksize;
 	newstacksize = currentstactsize*2;
-	newstackelements = (struct shadowstackelem *)calloc(newstacksize,sizeof(struct _shadowstackelem));
+	newstackelements = (struct _shadowstackelem *)calloc(newstacksize,sizeof(struct _shadowstackelem));
 	if (newstackelements == NULL){
 		printf("expandstack(): memory allocation not success\n");
 		return -1;
@@ -37,10 +39,10 @@ struct _shadowstackelem * topstackelem(shadowstack * psstack){
 		return NULL;
 	}
 	if (psstack->top == 0){
-		printf("stack is empty \n");
+		printf("topstackelem(): stack is empty \n");
 		return NULL;
 	} else {
-		return psstack->stackelements[psstack->top -1];
+		return &(psstack->stackelements[psstack->top -1]);
 	}
 }
 
@@ -66,10 +68,10 @@ int pushstackelem(shadowstack * psstack, char * funcname){
 			return -1;
 		}
 	} 
-	psstack->stackelements[psstack->top]->funcname = funcname;
-	psstack->stackelements[psstack->top]->ts = count;
-	psstack->stackelements[psstack->top]->rms = 0;
-	psstack->stackelements[psstack->top]->cost = conscost;
+	(psstack->stackelements[psstack->top]).funcname = funcname;
+	(psstack->stackelements[psstack->top]).ts = 0;//count;
+	(psstack->stackelements[psstack->top]).rms = 0;
+	(psstack->stackelements[psstack->top]).cost = 0;
 	psstack->elementsnum++;
 	psstack->top++;
 	return 0;
@@ -85,7 +87,7 @@ int popstackelem(shadowstack * psstack){
 		return -1;
 	} else {
 		psstack->top--;
-		psstack->elementnum--;
+		psstack->elementsnum--;
 		return 0;
 	}
 	
@@ -94,7 +96,7 @@ int popstackelem(shadowstack * psstack){
 shadowstack * createshadowstack(){
 	shadowstack * psstack;
 	psstack = (shadowstack *) malloc (sizeof(shadowstack));
-	psstack->stackelements = (struct shadowstackelem *)calloc(INIEXPOSIZE,sizeof(struct _shadowstackelem));
+	psstack->stackelements = (struct _shadowstackelem *)calloc(INIEXPOSIZE,sizeof(struct _shadowstackelem));
 	
 	if (!psstack || !psstack->stackelements) {
 		printf("Error in createshadowstack(), momory allocation not success\n");
@@ -107,9 +109,9 @@ shadowstack * createshadowstack(){
 	}
 }
 
-void call(shadowstack * psstack,char * funcname) {
+/*void call(shadowstack * psstack,char * funcname) {
 	count++;
-	top++;
+//	top++;
 
 	s[top].funcname = funcname;
 	s[top].ts = count;
@@ -155,4 +157,4 @@ void write(unsigned long int  startaddr, unsigned int length) {
 		i += 8;
 	}
 }
-
+*/
