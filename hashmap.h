@@ -9,7 +9,7 @@
 
 typedef struct _hashmapelem {
 	char * key;  // indicate the address of the memory cell
-	int value;   // indicate the latest access of the memory cell
+	unsigned int value;   // indicate the latest access of the memory cell
 	struct _hashmapelem * next; // linked to the next element
 	int hash;
 } hashmapelem;
@@ -25,8 +25,8 @@ hashmap * createhashmap();
 void destroyhashmap(hashmap * hmap);
 int hashmapremove(hashmap * hmap, char * key);
 unsigned int keytoindex(char * key);
-int hashmapput(hashmap * hmap, char * key, int value);
-int hashmapget(hashmap * hmap, char * key, int value);
+int hashmapput(hashmap * hmap, char * key, unsigned int value);
+int hashmapget(hashmap * hmap, char * key);
 unsigned long int stringtoint(char * str);
 int currentslotsize(hashmap * hmap);
 int currentelemsize(hashmap * hmap);

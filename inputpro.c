@@ -1,4 +1,5 @@
 #include "inputpro.h"
+#include "hashmap.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,7 +127,7 @@ void call(shadowstack * psstack,char * funcname) {
 	pushresult = pushstackelem(psstack, funcname, count);
 	if (pushresult != 0){
 		printf("call(): push stack error.\n");
-		exit();
+		exit(0);
 	}
 
 }
@@ -154,30 +155,79 @@ int callreturn(shadowstack * psstack) {
 	popresult = popstackelem(psstack);
 }
 
-void read(unsigned long startaddr, unsigned int length) {
+void read(unsigned long startaddr, unsigned int length) { 
+/* just in case the input parameter startaddr is char *
 	unsigned long int i;
 	unsigned int j,l;
+*/
+	unsigned long i;
+	unsigned int j,l,stackresult;
+	long hashmapresult;
+	char * stringaddr;
+	key = (char *)malloc(30*sizeof(char));
+	
+	if (key == NULL){
+		printf("read(): memory allocation error\n");
+		exit(0);
+	}
+	
 	j = length; // j records byte length
-	for (i=startaddr; j > 0; j--){ // i is the current byte address
-		if (ts[i] < s[top].ts){//first access byte cell
-			s[top].rms++;
-		} 
-		if (ts[i] != 0) {
-			for (l=top;s[l].ts <= ts[i];l--)//find max index in s, that s[l].ts <= ts[i]
-				break;
-			s[l].rms--;
+	
+	for (i=startaddr; j > 0; j--){ // i is the address of current byte
+		
+		sprintf(stringaddr, "%lx", i); // turn i into hex string address, stringaddr is w
+		hashmapresult = hashmapget(hmap,stringaddr); // hashmapresult records the ts[stringaddr]
+		stackresult = psstack->elements[psstack->top -1].ts; //stackresult records the S[top].ts
+		
+		if (hashmapresult<stackresult){  // ts[stringaddr] < S[top].ts
+			psstack->elements[psstack->top -1].rms++;
+			if (hashmapresult > 0){ // ts[w] != 0 
+				l = psstack->top-1; //S[l] is S[top]
+				while(psstack->elements[l].ts > hashmapresult) //l be the max index in S such that S[l].ts<=ts[stringaddr] 
+					l--;
+				psstack->elements[l].rms--; //S[i].rms--
+			}
 		}
-		ts[i] = count;
+		
+		hashmapresult = hashmapput(hmap,stringaddr,count); // ts[stringaddr] = count;
+		
+		if (hashmapresult >= 0){
+			printf("read(): ts[startaddr] update successful\n");
+		} else {
+			printf("read(): ts[startaddr] update failure\n");
+		}
+		
 		i += 8;// continue on next byte
 	}
 		
 }
 
 void write(unsigned long int  startaddr, unsigned int length) {
-	unsigned long int i;
-	unsigned int j = length;
+	
+	unsigned long i;
+	unsigned int j,l,stackresult;
+	long hashmapresult;
+	char * stringaddr;
+	key = (char *)malloc(30*sizeof(char));
+	
+	if (key == NULL){
+		printf("read(): memory allocation error\n");
+		exit(0);
+	}
+	
+	j = length; // j records byte length
+
 	for (i = startaddr; j > 0; j--){
-		ts[i] = count;
+		
+		sprintf(stringaddr, "%lx", i); // turn i into hex string address, stringaddr is w
+		hashmapresult = hashmapput(hmap,stringaddr,count); // ts[stringaddr] = count;
+		
+		if (hashmapresult >= 0){
+			printf("write(): ts[startaddr] update successful\n");
+		} else {
+			printf("write(): ts[startaddr] update failure\n");
+		}
+		
 		i += 8;
 	}
 }

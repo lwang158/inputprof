@@ -109,7 +109,7 @@ int hashmapremove(hashmap * hmap, char * key){
 		return -1;
 	}
 }
-int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of elem <key,value>
+int hashmapput(hashmap * hmap, char * key, unsigned int value){  // return oldvalue of elem <key,value>
 	struct _hashmapelem * p, * q;
 	char * startaddr = key;
 	int oldvalue;
@@ -182,7 +182,7 @@ int hashmapput(hashmap * hmap, char * key, int value){  // return oldvalue of el
 		}
 }
 
-int hashmapget(hashmap * hmap, char * key, int value) {
+int hashmapget(hashmap * hmap, char * key) { // key points to a string showing an address in hex format
 	unsigned int index;
 	struct _hashmapelem * p, * q;
 	//printf("---------entering hashmapget().\n");
@@ -207,7 +207,7 @@ int hashmapget(hashmap * hmap, char * key, int value) {
 			printf("             key:%s, value:%d \n", q->key, q->value);
 			q = q->next;
 		}*/
-		if (!strcmp(p->key, key)) {// the first element's key matches. 
+		if (!strcmp(p->key, key)) {// the slot element's key matches. 
 			//printf(" slot element match.\n\n");
 			return p->value;
 		}

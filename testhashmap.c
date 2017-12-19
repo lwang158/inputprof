@@ -55,7 +55,7 @@ int main () {
 		value->keystring[1]='x';
 		value->number = index;
 		//printf("start hashmapget(), keystring: %s, keyvalue: %d \n",value->keystring, value->number);
-		error = hashmapget(hmap, value->keystring, value->number);
+		error = hashmapget(hmap, value->keystring);
 		if (error < 0) printf("hashmapget(): there is an error in %luth round\n\n", index);
 	}
 	printf("after hashmapget() test\n");
