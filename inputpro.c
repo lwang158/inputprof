@@ -136,7 +136,7 @@ void collect(shadowstack * psstack){
 	if (psstack == NULL){
 		printf("collect(): stack pointer is NULL\n");
 	}
-	printf("collect(): collecting data functions needs to be finished\n");
+	printf(":ollect(): collecting data functions needs to be finished\n");
 }
 
 int callreturn(shadowstack * psstack) {
@@ -146,7 +146,6 @@ int callreturn(shadowstack * psstack) {
 		printf("callreturn(): stack pointer is NULL\n");
 		return -1;
 	}
-	
 	collect(shadowstack * psstack);
 	
 	if (psstack->top >1){ // stack has at least two elements.

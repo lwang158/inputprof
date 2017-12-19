@@ -1,7 +1,6 @@
 # include<stdlib.h>
 # include<stdio.h>
 # include<string.h>
-# include "hashmap.h"
 # include "inputpro.h"
 
 typedef struct datastruct{
@@ -16,7 +15,6 @@ typedef struct datastruct{
 int main () {
 	int i,length;
 	int error;
-	hashmap * hmap;
 	char key_string[256];
 	datas * value;
 	
@@ -47,7 +45,7 @@ int main () {
 		value->keystring[1]='x';            
 		//printf("after inner for, the value->keystring is %s\n",value->keystring);
 		value->number = index;
-		error = pushstackelem(psstack, value->keystring);
+		error = pushstackelem(psstack, value->keystring, value->number);
 		if (error == -1) printf("pushstackelem(): there is an error in %luth round\n", index);
 	}
 	printf("after pushstackelem() test, psstack->stacksize=%lu, psstack->elementsnum=%lu. \n\n",psstack->stacksize, psstack->elementsnum);
