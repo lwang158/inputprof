@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern hashmap * hmap;
+extern shadowstack * psstack;
 
 unsigned int count = 0;
 
@@ -162,12 +164,12 @@ void read(unsigned long startaddr, unsigned int length) {
 	unsigned long i;
 	unsigned int j,l,stackresult;
 	long hashmapresult;
-	char * stringaddr;
+	char * stringaddr, * key;
 	key = (char *)malloc(30*sizeof(char));
 	
 	if (key == NULL){
 		printf("read(): memory allocation error\n");
-		exit(0);
+	 	exit(0);	
 	}
 	
 	j = length; // j records byte length
@@ -176,15 +178,15 @@ void read(unsigned long startaddr, unsigned int length) {
 		
 		sprintf(stringaddr, "%lx", i); // turn i into hex string address, stringaddr is w
 		hashmapresult = hashmapget(hmap,stringaddr); // hashmapresult records the ts[stringaddr]
-		stackresult = psstack->elements[psstack->top -1].ts; //stackresult records the S[top].ts
+		stackresult = psstack->stackelements[psstack->top -1].ts; //stackresult records the S[top].ts
 		
 		if (hashmapresult<stackresult){  // ts[stringaddr] < S[top].ts
-			psstack->elements[psstack->top -1].rms++;
+			psstack->stackelements[psstack->top -1].rms++;
 			if (hashmapresult > 0){ // ts[w] != 0 
 				l = psstack->top-1; //S[l] is S[top]
-				while(psstack->elements[l].ts > hashmapresult) //l be the max index in S such that S[l].ts<=ts[stringaddr] 
+				while(psstack->stackelements[l].ts > hashmapresult) //l be the max index in S such that S[l].ts<=ts[stringaddr] 
 					l--;
-				psstack->elements[l].rms--; //S[i].rms--
+				psstack->stackelements[l].rms--; //S[i].rms--
 			}
 		}
 		
@@ -206,7 +208,7 @@ void write(unsigned long int  startaddr, unsigned int length) {
 	unsigned long i;
 	unsigned int j,l,stackresult;
 	long hashmapresult;
-	char * stringaddr;
+	char * stringaddr, * key;
 	key = (char *)malloc(30*sizeof(char));
 	
 	if (key == NULL){

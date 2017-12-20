@@ -1,6 +1,5 @@
 #define INIEXPOSIZE 1024
 
-
 typedef struct _shadowstackelem {
 	char * funcname; // function name of current activation
 	unsigned int ts; // time stamp of 
